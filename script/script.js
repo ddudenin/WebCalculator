@@ -48,7 +48,7 @@ function declOfNum(n, titles) {
   return n + ' ' + titles[n % 10 === 1 && n % 100 !== 11 ?
     0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2];
 }
-  
+
 function showElem(elem) {
   elem.style.display = 'block';
 }
@@ -208,6 +208,28 @@ function moveTotal(){
   }
 }
 
+const renderResponse = responce => {
+  if(responce.ok){
+    hideElem(total);
+    cardHead.textContent = 'Заявка на разработку сайта была отправлена! Мы скоро с Вами свяжемся';
+    cardHead.style.color = '#00cc00';
+  }
+};
+
+const formSumbit = event =>{
+  event.preventDefault();
+
+  const data = new FormData(event.target);
+
+  fetch('server.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    body: 'data',
+  }).then(renderResponse).catch(error => console.log(error));
+};
+
 startButton.addEventListener('click', function (){
   showElem(mainForm);
   hideElem(firstScreen);
@@ -230,6 +252,8 @@ endButton.addEventListener('click', function (){
 });
 
 formCalculate.addEventListener('change', handlerCallBackForm);
+
+formCalculate.addEventListener('submit', formSumbit);
 
 priceCalculation();
 
